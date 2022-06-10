@@ -122,6 +122,8 @@ function modalClose() {
   document.getElementsByClassName("modal-backdrop")[0].style.display = "none";
   document.getElementsByClassName("modal")[0].style.display = "none";
   mode = '';
+  document.getElementById('title').value = '';
+  document.getElementById('content').value = '';
 }
 
 function detailItem(no) {
