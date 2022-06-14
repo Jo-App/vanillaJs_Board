@@ -1,7 +1,4 @@
-let mode = '';
-let title = '';
-let content = '';
-let date = '';
+let boardNo = '';
 
 //data.json 내용을 로컬스토리지에 문자형식으로 넣는다.
 async function dataSet() {
@@ -34,22 +31,15 @@ function modalModeSet() {
   }
 }
 
-// function modalButtonWrite() {
-//   let modalButton = document.getElementById("modalButton");
-//   if(mode == 'Add') {
-//     modalButton.innerHTML = '등록';
-//   } else if(mode == 'Detail') {
-//     modalButton.innerHTML = '수정모드';
-//   } else if(mode == 'Edit') {
-//     modalButton.innerHTML = '수정';
-//   }
-// }
-
 function modalAction() {
-  console.log(mode)
   if(mode == 'Add') {
     boardSave();
-  } else if (mode =='Edit') {
+  } else if(mode == 'Detail') {
+    document.getElementById('title').readOnly = false;
+    document.getElementById('content').readOnly = false;
+    mode = 'Edit';
+    modalModeSet();
+  } else if(mode == 'Edit') {
     boardEdit();
   }
 }
@@ -72,6 +62,30 @@ function boardSave() {
   boardListAction();
   alert('등록 완료');
   modalClose();
+}
+
+function boardEdit() {
+  let title = document.getElementById('title').value;
+  let content = document.getElementById('content').value;
+  let storageList = JSON.parse(window.localStorage.getItem('storageList'));
+  let date = new Date();
+  
+  date = dateFormat(date);
+  const index = storageList.findIndex((data) => {
+    return data.no == boardNo;
+  });
+
+  storageList[index] = new Object({
+    no: boardNo,
+    title: title,
+    content: content,
+    date: date,
+  });
+
+  window.localStorage.setItem('storageList',JSON.stringify(storageList));
+  boardListAction();
+  modalClose();
+  alert('수정  완료');
 }
 
 function boardListRemove() {
@@ -134,7 +148,18 @@ function modalClose() {
 }
 
 function detailItem(no) {
-  console.log(no)
+  modalOpen('Detail');
+  let storageList = JSON.parse(window.localStorage.getItem('storageList'));
+  let detail = storageList.filter((data) => {
+    return data.no == no;
+  });
+  let title = document.getElementById('title');
+  let content = document.getElementById('content');
+  title.value = detail[0].title;
+  content.value = detail[0].content;
+  title.readOnly = true;
+  content.readOnly = true;
+  boardNo = no;
 }
 
 function deleteItem(no){
