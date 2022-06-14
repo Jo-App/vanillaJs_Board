@@ -19,23 +19,31 @@ async function dataSet() {
   boardListAction(); 
 }
 
-function modalTitleWrite() {
+function modalModeSet() {
   let titleType = document.getElementById("titleType");
+  let modalButton = document.getElementById("modalButton");
   if(mode == 'Add') {
-    titleType.innerHTML = '등록';
+    titleType.innerHTML = '글 등록';
+    modalButton.innerHTML = '등록';
+  } else if(mode == 'Detail') {
+    titleType.innerHTML = '글 상세';
+    modalButton.innerHTML = '수정모드';
   } else if(mode == 'Edit') {
-    titleType.innerHTML = '수정';
+    titleType.innerHTML = '글 수정';
+    modalButton.innerHTML = '수정';
   }
 }
 
-function modalButtonWrite() {
-  let modalButton = document.getElementById("modalButton");
-  if(mode == 'Add') {
-    modalButton.innerHTML = 'Save';
-  } else if(mode == 'Edit') {
-    modalButton.innerHTML = 'Eidt';
-  }
-}
+// function modalButtonWrite() {
+//   let modalButton = document.getElementById("modalButton");
+//   if(mode == 'Add') {
+//     modalButton.innerHTML = '등록';
+//   } else if(mode == 'Detail') {
+//     modalButton.innerHTML = '수정모드';
+//   } else if(mode == 'Edit') {
+//     modalButton.innerHTML = '수정';
+//   }
+// }
 
 function modalAction() {
   console.log(mode)
@@ -48,7 +56,7 @@ function modalAction() {
 
 function boardSave() {
   let storageData = JSON.parse(window.localStorage.getItem('storageList'));
-  let lastIndex = storageData.slice(-1)[0].no;
+  let lastIndex = storageData.length == 0 ? 0 : storageData.slice(-1)[0].no;
   let title = document.getElementById('title').value;
   let content = document.getElementById('content').value;
   let date = new Date();
@@ -114,8 +122,7 @@ function modalOpen(type) {
   document.getElementsByClassName("modal-backdrop")[0].style.display = "block";
   document.getElementsByClassName("modal")[0].style.display = "block";
   mode = type;
-  modalTitleWrite();
-  modalButtonWrite();
+  modalModeSet();
 }
 
 function modalClose() {
