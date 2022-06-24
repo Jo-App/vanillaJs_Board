@@ -189,19 +189,12 @@ function renderPagination(totalCount, currentPage) {
 };
 
 function movePage(page) {
-  console.log('movePage')
   _page = page;
   _start = Number(String(page) + '0') - 10;
   _limit = Number(String(page) + '0');
 
-  let page_ul = document.getElementById('page_ul');
-
-  //console.log(page_ul)
-  
-  // .removeAttribute("active");;
-  // document.getElementById("myAnchor").removeAttribute("active");
-
-
+  let activeItem = document.getElementsByClassName('active');
+  activeItem[0].classList.remove('active')
   let pageItem = document.getElementsByClassName(`page-item-${page}`);
   pageItem[0].classList.add("active");
 
@@ -213,7 +206,10 @@ function nextPage(last) {
   while (page_ul.hasChildNodes() ) {
     page_ul.removeChild(page_ul.firstChild); 
   }
+  page_ul.remove();
+
   renderPagination(_storageData, last+1);
+  movePage(last+1)
 }
 
 function prePage(first) {
@@ -221,7 +217,10 @@ function prePage(first) {
   while (page_ul.hasChildNodes() ) {
     page_ul.removeChild(page_ul.firstChild); 
   }
+  page_ul.remove();
+
   renderPagination(_storageData, first-10);
+  movePage(first-10)
 }
 
 function modalOpen(type) {
