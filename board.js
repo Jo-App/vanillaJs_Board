@@ -1,5 +1,4 @@
 let _storageData = null;
-let _boardNo = '';
 let _page = 0;
 let _start = 0;
 let _limit = 10;
