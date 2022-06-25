@@ -50,7 +50,6 @@ function modalAction() {
 }
 
 function boardSave() {
-  //let storageData = JSON.parse(window.localStorage.getItem('storageList'));
   let lastIndex = _storageData.length == 0 ? 0 : _storageData.slice(-1)[0].no;
   let title = document.getElementById('title').value;
   let content = document.getElementById('content').value;
@@ -72,22 +71,21 @@ function boardSave() {
 function boardEdit() {
   let title = document.getElementById('title').value;
   let content = document.getElementById('content').value;
-  let storageList = JSON.parse(window.localStorage.getItem('storageList'));
   let date = new Date();
 
   date = dateFormat(date);
-  const index = storageList.findIndex((data) => {
+  const index = _storageData.findIndex((data) => {
     return data.no == _boardNo;
   });
 
-  storageList[index] = new Object({
+  _storageData[index] = new Object({
     no: _boardNo,
     title: title,
     content: content,
     date: date,
   });
 
-  window.localStorage.setItem('storageList',JSON.stringify(storageList));
+  window.localStorage.setItem('storageList',JSON.stringify(_storageData));
   boardListAction();
   modalClose();
   alert('수정 완료');
@@ -103,14 +101,13 @@ function boardListRemove() {
 
 //로컬스토리지의 내용을 읽어서 테이블에 데이터를 바인딩시킨다. 
 function boardListAction() {
-  let storageList = JSON.parse(window.localStorage.getItem('storageList'));
   const dataTable = document.getElementById('dataTable');
   boardListRemove();
 
-  if(storageList) {
+  if(_storageData) {
 
     for(let i=_start; i<_limit; i++) {
-      if(storageList[i]) {
+      if(_storageData[i]) {
         let tr = document.createElement("tr");
         let th_no = document.createElement("th");
         let td_title = document.createElement("td");
@@ -119,13 +116,13 @@ function boardListAction() {
         let td_action = document.createElement("td");
 
         th_no.setAttribute('scope', 'row');
-        th_no.innerText = storageList[i].no;
-        td_title.innerText = storageList[i].title;
-        td_content.innerText = storageList[i].content.length > 20 ? storageList[i].content.substr(0, 20) + '...' : storageList[i].content; //20글자 뒤에는 ... 으로 처리
-        td_date.innerText = storageList[i].date;
+        th_no.innerText = _storageData[i].no;
+        td_title.innerText = _storageData[i].title;
+        td_content.innerText = _storageData[i].content.length > 20 ? _storageData[i].content.substr(0, 20) + '...' : _storageData[i].content; //20글자 뒤에는 ... 으로 처리
+        td_date.innerText = _storageData[i].date;
         td_action.innerHTML = `
-          <i class="bi bi-file-text" onClick="detailItem(`+storageList[i].no+`)"></i>
-          <i class="bi bi-trash-fill" onClick="deleteItem(`+storageList[i].no+`)"></i>
+          <i class="bi bi-file-text" onClick="detailItem(`+_storageData[i].no+`)"></i>
+          <i class="bi bi-trash-fill" onClick="deleteItem(`+_storageData[i].no+`)"></i>
         `;
 
         tr.appendChild(th_no);
@@ -143,14 +140,14 @@ function boardListAction() {
 function renderPagination(totalCount, currentPage) {
   if (totalCount.length <= 10) return; 
   
-  var totalPage = Math.ceil(totalCount.length / 10);
-  var pageGroup = Math.ceil(currentPage / 10);
+  let totalPage = Math.ceil(totalCount.length / 10);
+  let pageGroup = Math.ceil(currentPage / 10);
 
-  var last = pageGroup * 10;
+  let last = pageGroup * 10;
   if (last > totalPage) last = totalPage;
-  var first = last - (10 - 1) <= 0 ? 1 : last - (10 - 1);
-  var next = last + 1;
-  var prev = first - 1;
+  let first = last - (10 - 1) <= 0 ? 1 : last - (10 - 1);
+  let next = last + 1;
+  let prev = first - 1;
 
   let pageList = document.createElement('ul');
   pageList.id = 'page_ul';
@@ -182,7 +179,7 @@ function renderPagination(totalCount, currentPage) {
     pageList.appendChild(endli);
   }
 
-  document.getElementById('js-pagination').appendChild(pageList);
+  document.getElementById('page_area').appendChild(pageList);
 
   let pageItem = document.getElementsByClassName(`page-item-${currentPage}`);
   pageItem[0].classList.add("active");
@@ -240,8 +237,7 @@ function modalClose() {
 
 function detailItem(no) {
   modalOpen('Detail');
-  let storageList = JSON.parse(window.localStorage.getItem('storageList'));
-  let detail = storageList.filter((data) => {
+  let detail = _storageData.filter((data) => {
     return data.no == no;
   });
   let title = document.getElementById('title');
@@ -255,11 +251,10 @@ function detailItem(no) {
 
 function deleteItem(no){
   if (confirm(no +'번 글을 삭제하시겠습니까?') === true) {
-    let storageList = JSON.parse(window.localStorage.getItem('storageList'));
-    storageList = storageList.filter(function(data) {
+    _storageData = _storageData.filter(function(data) {
       return data.no != no;
     });
-    window.localStorage.setItem('storageList',JSON.stringify(storageList));
+    window.localStorage.setItem('storageList',JSON.stringify(_storageData));
     boardListAction();
   } else {
     return false;

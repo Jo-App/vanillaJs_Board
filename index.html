@@ -9,8 +9,26 @@
   <title>Document</title>
 </head>
 <body>
+  <section class="main">
+    <section style="display: flex; flex-direction: row-reverse;">
+      <button onclick="modalOpen('Add')" type="button" class="btn btn-primary">등록</button>
+    </section>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">제목</th>
+          <th scope="col">내용</th>
+          <th scope="col">작성일</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody id="dataTable">
+      </tbody>
+    </table>
+  </section>
   <section>
-    <nav aria-label="..." id="js-pagination">
+    <nav aria-label="..." id="page_area" style="display: flex; justify-content: center;">
        <!-- <ul id="page_ul" class="pagination">
         <li class="page-item disabled">
           <span class="page-link">Previous</span>
@@ -30,24 +48,6 @@
         </li>
       </ul>  -->
     </nav>
-  </section>
-  <section class="main">
-    <section style="display: flex; flex-direction: row-reverse;">
-      <button onclick="modalOpen('Add')" type="button" class="btn btn-primary">등록</button>
-    </section>
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">제목</th>
-          <th scope="col">내용</th>
-          <th scope="col">작성일</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody id="dataTable">
-      </tbody>
-    </table>
   </section>
 
   <div class="modal-backdrop"></div>
