@@ -1,7 +1,7 @@
 let _storageData = null;
-let _page = 0;
-let _start = 0;
-let _limit = 10;
+let _page = 0; //현재 페이지 번호
+let _start = 0; //시작 페이지 번호
+let _limit = 10; //마지막 페이지 번호
 
 //data.json 내용을 로컬스토리지에 문자형식으로 넣는다.
 async function dataSet() {
@@ -66,7 +66,7 @@ function boardListRemove() {
 
 //페이지 컨트롤 영역 그리기
 function renderPagination(totalCount, currentPage) {
-  if (totalCount.length <= 10) return; 
+  if (totalCount.length <= 10) return;
   
   let totalPage = Math.ceil(totalCount.length / 10);
   let pageGroup = Math.ceil(currentPage / 10);
@@ -86,7 +86,6 @@ function renderPagination(totalCount, currentPage) {
     preli.className = 'page-item';
     preli.onclick = () => prePage(first);
     preli.insertAdjacentHTML("beforeend", `<span class="page-link">Previous</span>`);
-    //preli.insertAdjacentHTML("beforeend", `<li class="page-item" onClick="prePage(${first})"><span class="page-link">Previous</span></li>`);
     pageList.appendChild(preli);
   }
 	
@@ -103,7 +102,6 @@ function renderPagination(totalCount, currentPage) {
     endli.className = 'page-item';
     endli.onclick = () => nextPage(last);
     endli.insertAdjacentHTML("beforeend", `<a class="page-link" href="#">Next</a>`);
-
     pageList.appendChild(endli);
   }
 
