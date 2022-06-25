@@ -152,4 +152,3 @@ function prePage(first) {
 }
 
 dataSet();
-boardListAction();
