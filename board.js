@@ -1,8 +1,8 @@
-let _boardNo = '';
-let _page = 0;
+let _storageData = null;
+let _boardNo = null;
+let _page = 1;
 let _start = 0;
 let _limit = 10;
-let _storageData = null;
 
 //data.json 내용을 로컬스토리지에 문자형식으로 넣는다.
 async function dataSet() {
@@ -18,7 +18,7 @@ async function dataSet() {
     window.localStorage.setItem('storageList',JSON.stringify(data));
   }
   boardListAction();
-  renderPagination(_storageData, _page+1);
+  renderPagination(_storageData, _page);
 }
 
 function modalModeSet() {
@@ -98,14 +98,12 @@ function boardListRemove() {
   }
 }
 
-
 //로컬스토리지의 내용을 읽어서 테이블에 데이터를 바인딩시킨다. 
 function boardListAction() {
   const dataTable = document.getElementById('dataTable');
   boardListRemove();
 
   if(_storageData) {
-
     for(let i=_start; i<_limit; i++) {
       if(_storageData[i]) {
         let tr = document.createElement("tr");
@@ -158,7 +156,6 @@ function renderPagination(totalCount, currentPage) {
     preli.className = 'page-item';
     preli.onclick = () => prePage(first);
     preli.insertAdjacentHTML("beforeend", `<span class="page-link">Previous</span>`);
-    //preli.insertAdjacentHTML("beforeend", `<li class="page-item" onClick="prePage(${first})"><span class="page-link">Previous</span></li>`);
     pageList.appendChild(preli);
   }
 	
