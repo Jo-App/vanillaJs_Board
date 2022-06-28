@@ -1,7 +1,7 @@
 let _storageData = null;
-let _page = 0; //현재 페이지 번호
-let _start = 0; //시작 페이지 번호
-let _limit = 10; //마지막 페이지 번호
+let _page = 1; //현재 페이지 번호
+let _start = 0; //조회 시작 데이터 배열 번호
+let _limit = 10; //조회 마지막 데이터 배열 번호
 
 //data.json 내용을 로컬스토리지에 문자형식으로 넣는다.
 async function dataSet() {
@@ -16,8 +16,8 @@ async function dataSet() {
     });
     window.localStorage.setItem('storageList',JSON.stringify(data));
   }
-  boardListAction();
-  renderPagination(_storageData, _page+1);
+  boardListAction(); //게시물 목록 바인딩
+  renderPagination(_storageData, _page); //페이징 바인딩
 }
 
 //로컬스토리지의 내용을 읽어서 테이블에 데이터를 바인딩시킨다. 
@@ -66,10 +66,10 @@ function boardListRemove() {
 
 //페이지 컨트롤 영역 그리기
 function renderPagination(totalCount, currentPage) {
-  if (totalCount.length <= 10) return;
+  if (totalCount.length <= 10) return; //게시물 데이터가 10개 이하이면 페이지 영역을 그리지 않는다.
   
-  let totalPage = Math.ceil(totalCount.length / 10);
-  let pageGroup = Math.ceil(currentPage / 10);
+  let totalPage = Math.ceil(totalCount.length / 10); //페이징 목록의 총 개수를 구한다.
+  let pageGroup = Math.ceil(currentPage / 10); //한 페이징 목록은 10개씩 구성한다.
 
   let last = pageGroup * 10;
   if (last > totalPage) last = totalPage;
@@ -81,7 +81,7 @@ function renderPagination(totalCount, currentPage) {
   pageList.id = 'page_ul';
   pageList.className = 'pagination';
 
-  if (prev > 0) {
+  if (prev > 0) { //이전페이징 버튼
     const preli = document.createElement('li');
     preli.className = 'page-item';
     preli.onclick = () => prePage(first);
@@ -89,7 +89,7 @@ function renderPagination(totalCount, currentPage) {
     pageList.appendChild(preli);
   }
 	
-  for (let i = first; i <= last; i++) {
+  for (let i = first; i <= last; i++) { //페이징목록 숫자 버튼
     const li = document.createElement("li");
     li.className = 'page-item-' + i;
     li.onclick = () => movePage(i);
@@ -97,7 +97,7 @@ function renderPagination(totalCount, currentPage) {
     pageList.appendChild(li);
   }
 
-  if (last < totalPage) {
+  if (last < totalPage) { //다음페이징 버튼
     const endli = document.createElement('li');
     endli.className = 'page-item';
     endli.onclick = () => nextPage(last);
@@ -105,10 +105,10 @@ function renderPagination(totalCount, currentPage) {
     pageList.appendChild(endli);
   }
 
-  document.getElementById('page_area').appendChild(pageList);
+  document.getElementById('page_area').appendChild(pageList); //최종 페이징을 HTML에 바인딩
 
   let pageItem = document.getElementsByClassName(`page-item-${currentPage}`);
-  pageItem[0].classList.add("active");
+  pageItem[0].classList.add("active"); //페이징 번호 active 스타일 적용 처리
 };
 
 //페이지 이동
@@ -117,10 +117,13 @@ function movePage(page) {
   _start = Number(String(page) + '0') - 10;
   _limit = Number(String(page) + '0');
 
-  let activeItem = document.getElementsByClassName('active');
-  activeItem[0].classList.remove('active')
+  console.log(_start)
+  console.log(_limit)
+
+  let activeItem = document.getElementsByClassName('active'); 
+  activeItem[0].classList.remove('active') //기존 active 스타일 제거
   let pageItem = document.getElementsByClassName(`page-item-${page}`);
-  pageItem[0].classList.add("active");
+  pageItem[0].classList.add("active"); //페이징 번호 active 스타일 적용 처리
 
   boardListAction();
 }
@@ -133,7 +136,7 @@ function nextPage(last) {
   }
   page_ul.remove();
 
-  renderPagination(_storageData, last+1);
+  renderPagination(_storageData, last+1); //다음 페이지는 10의배수+1에서 시작
   movePage(last+1)
 }
 
@@ -145,7 +148,7 @@ function prePage(first) {
   }
   page_ul.remove();
 
-  renderPagination(_storageData, first-10);
+  renderPagination(_storageData, first-10); //이전 페이지는 현재의 시작페이지의 -10에서 시작
   movePage(first-10)
 }
 
