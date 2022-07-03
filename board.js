@@ -24,12 +24,17 @@ async function dataSet() {
 function modalModeSet() {
   let titleType = document.getElementById("titleType");
   let modalButton = document.getElementById("modalButton");
+  let name = document.getElementById("name");
+
   if(mode == 'Add') {
     titleType.innerHTML = '글 등록';
     modalButton.innerHTML = '등록';
+    document.getElementById("commnet-area").style.display = "none";
   } else if(mode == 'Detail') {
     titleType.innerHTML = '글 상세';
     modalButton.innerHTML = '수정모드';
+    document.getElementById("commnet-area").style.display = "flex";
+    name.value = randName();
   } else if(mode == 'Edit') {
     titleType.innerHTML = '글 수정';
     modalButton.innerHTML = '수정';
@@ -115,7 +120,8 @@ function boardListAction() {
 
         th_no.setAttribute('scope', 'row');
         th_no.innerText = _storageData[i].no;
-        td_title.innerText = _storageData[i].title;
+        const title = _storageData[i].commentList ? _storageData[i].title + ' (' + _storageData[i].commentList.length + ')' : _storageData[i].title;
+        td_title.innerText = title;
         td_content.innerText = _storageData[i].content.length > 20 ? _storageData[i].content.substr(0, 20) + '...' : _storageData[i].content; //20글자 뒤에는 ... 으로 처리
         td_date.innerText = _storageData[i].date;
         td_action.innerHTML = `
@@ -244,6 +250,10 @@ function detailItem(no) {
   title.readOnly = true;
   content.readOnly = true;
   _boardNo = no;
+
+  if(detail[0].commentList) {
+    commentListAction(detail[0].commentList);
+  }
 }
 
 function deleteItem(no){
@@ -256,6 +266,34 @@ function deleteItem(no){
   } else {
     return false;
   }
+}
+
+function resize(obj) {
+  obj.style.height = "1px";
+  obj.style.height = (12+obj.scrollHeight)+"px";
+}
+
+//댓글 목록 불러오기
+function commentListAction(commentList) {
+  console.log(commentList)
+
+  //기존 댓글 목록 지움
+  let dataComment = document.getElementById('dataComment');
+  while (dataComment.hasChildNodes() ) {
+    dataComment.removeChild( dataComment.firstChild); 
+  }
+
+  
+  commentList.map(data => {
+    console.log(data)
+    let li = document.createElement("li");
+    li.innerHTML = `
+      <i class="bi bi-person-circle" style="color:gray">`+data.name + ` ` + data.date+`</i>
+      <p>`+data.comment+`</p>
+      <hr>
+    `;
+    dataComment.appendChild(li);
+  });
 }
 
 dataSet();
@@ -302,4 +340,17 @@ function dateFormat(dateNum) {
     result = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + seconds;
   }
   return result;
+}
+
+function randName() {
+  let text = "";
+  let first = "김이박최정강조윤장임한오서신권황안송류전홍고문양손배조백허유남심노정하곽성차주우구신임나전민유진지엄채원천방공강현함변염양변여추노도소신석선설마주연방위표명기반왕모장남탁국여진구";
+  let last = "가강건경고관광구규근기길나남노누다단달담대덕도동두라래로루리마만명무문미민바박백범별병보사산상새서석선설섭성세소솔수숙순숭슬승시신아안애엄여연영예오옥완요용우원월위유윤율으은의이익인일자잔장재전정제조종주준중지진찬창채천철초춘충치탐태택판하한해혁현형혜호홍화환회효훈휘희운모배부림봉혼황량린을비솜공면탁온디항후려균묵송욱휴언들견추걸삼열웅분변양출타흥겸곤번식란더손술반빈실직악람권복심헌엽학개평늘랑향울련";
+
+  for (var i = 0; i < 1; i++)
+    text += first.charAt(Math.floor(Math.random() * first.length));
+  for (var i = 0; i < 2; i++)
+    text += last.charAt(Math.floor(Math.random() * last.length));
+
+  return text;
 }
