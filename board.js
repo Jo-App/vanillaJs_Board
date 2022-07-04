@@ -253,6 +253,12 @@ function detailItem(no) {
 
   if(detail[0].commentList) {
     commentListAction(detail[0].commentList);
+  } else {
+    //기존 댓글 목록 지움
+    let dataComment = document.getElementById('dataComment');
+    while (dataComment.hasChildNodes() ) {
+      dataComment.removeChild( dataComment.firstChild); 
+    }
   }
 }
 
@@ -275,17 +281,13 @@ function resize(obj) {
 
 //댓글 목록 불러오기
 function commentListAction(commentList) {
-  console.log(commentList)
-
   //기존 댓글 목록 지움
   let dataComment = document.getElementById('dataComment');
   while (dataComment.hasChildNodes() ) {
     dataComment.removeChild( dataComment.firstChild); 
   }
 
-  
   commentList.map(data => {
-    console.log(data)
     let li = document.createElement("li");
     li.innerHTML = `
       <i class="bi bi-person-circle" style="color:gray">`+data.name + ` ` + data.date+`</i>
@@ -294,6 +296,45 @@ function commentListAction(commentList) {
     `;
     dataComment.appendChild(li);
   });
+}
+
+//댓글 등록
+function commentSave() {
+  const name = document.getElementById('name').value;
+  let comment = document.getElementById('comment').value;
+  let date = new Date();
+  date = dateFormat(date);
+  let detail = _storageData.filter((data) => {
+    return data.no == _boardNo;
+  });
+  
+  if(detail[0].commentList == undefined) {
+    detail[0].commentList = new Array();
+    detail[0].commentList.push({
+      no: 1, 
+      name: name, 
+      comment: comment, 
+      date: date
+    });
+  } else {
+    let lastIndex = detail[0].commentList.slice(-1)[0].no;
+
+    detail[0].commentList = 
+    [
+      ...detail[0].commentList, 
+      {
+        no: lastIndex+1, 
+        name: name, 
+        comment: comment, 
+        date: date
+      }
+    ];
+  }
+
+  window.localStorage.setItem('storageList',JSON.stringify(_storageData));
+  document.getElementById('comment').value = '';
+  commentListAction(detail[0].commentList);
+  boardListAction();
 }
 
 dataSet();
