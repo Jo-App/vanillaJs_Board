@@ -141,8 +141,8 @@ function boardListAction() {
         td_content.innerText = _storageData[i].content.length > 20 ? _storageData[i].content.substr(0, 20) + '...' : _storageData[i].content; //20글자 뒤에는 ... 으로 처리
         td_date.innerText = _storageData[i].date;
         td_action.innerHTML = `
-          <i class="bi bi-file-text" onClick="detailItem(${_storageData[i].no})"></i>
-          <i class="bi bi-trash-fill" onClick="deleteItem(${_storageData[i].no})"></i>
+          <i class="bi bi-file-text" onClick="detailItem(${_storageData[i].no})" style="cursor: pointer;"></i>
+          <i class="bi bi-trash-fill" onClick="deleteItem(${_storageData[i].no})" style="cursor: pointer;"></i>
         `;
 
         tr.appendChild(th_no);
@@ -290,11 +290,6 @@ function deleteItem(no){
   }
 }
 
-// function resize(obj) {
-//   obj.style.height = "1px";
-//   obj.style.height = (12+obj.scrollHeight)+"px";
-// }
-
 //댓글 목록 불러오기
 function commentListAction(commentList) {
   //기존 댓글 목록 지움
@@ -307,7 +302,13 @@ function commentListAction(commentList) {
     let li = document.createElement("li");
     li.innerHTML = `
       <i class="bi bi-person-circle" style="color:gray">`+data.name + ` ` + data.date+`</i>
-      <p>`+data.comment+`</p>
+      <div style="display: flex; justify-content: space-between;">
+        <p>`+data.comment+`</p>
+        <div>
+          <i class="bi bi-pencil-square" onClick="commentEdit(${data.no})" style="cursor: pointer;"></i>
+          <i class="bi bi-x-square" onClick="commentDelete(${data.no})" style="cursor: pointer;"></i>
+        </div>
+      </div>
       <hr>
     `;
     dataComment.appendChild(li);
@@ -345,13 +346,32 @@ function commentSave() {
         date: date
       }
     ];
-  }
+  };
 
   window.localStorage.setItem('storageList',JSON.stringify(_storageData));
   document.getElementById('comment').value = '';
   commentListAction(detail[0].commentList);
   boardListAction();
   document.getElementById('dataComment').scrollTop = document.getElementById('dataComment').scrollHeight;
+}
+
+//댓글 삭제
+function commentDelete(no) {
+  if (confirm('댓글을 삭제하시겠습니까?') === true) {
+    for(let i=0; i<_storageData.length; i++) {
+      if(_storageData[i].no == _boardNo){
+        _storageData[i].commentList = _storageData[i].commentList.filter(function(data) {
+          return data.no != no;
+        });
+        window.localStorage.setItem('storageList',JSON.stringify(_storageData));
+        commentListAction(_storageData[i].commentList);
+        boardListAction();
+        break;
+      }
+    }
+  } else {
+    return false;
+  }
 }
 
 dataSet();
