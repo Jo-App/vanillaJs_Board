@@ -3,6 +3,7 @@ let _boardNo = null;
 let _page = 1;
 let _start = 0;
 let _limit = 10;
+let _mode = '';
 
 //data.json 내용을 로컬스토리지에 문자형식으로 넣는다.
 async function dataSet() {
@@ -26,30 +27,30 @@ function modalModeSet() {
   let modalButton = document.getElementById("modalButton");
   let name = document.getElementById("name");
 
-  if(mode == 'Add') {
+  if(_mode == 'Add') {
     titleType.innerHTML = '글 등록';
     modalButton.innerHTML = '등록';
     document.getElementById("commnet-area").style.display = "none";
-  } else if(mode == 'Detail') {
+  } else if(_mode == 'Detail') {
     titleType.innerHTML = '글 상세';
     modalButton.innerHTML = '수정모드';
     document.getElementById("commnet-area").style.display = "flex";
     name.value = randName();
-  } else if(mode == 'Edit') {
+  } else if(_mode == 'Edit') {
     titleType.innerHTML = '글 수정';
     modalButton.innerHTML = '수정';
   }
 }
 
 function modalAction() {
-  if(mode == 'Add') {
+  if(_mode == 'Add') {
     boardSave();
-  } else if(mode == 'Detail') {
+  } else if(_mode == 'Detail') {
     document.getElementById('title').readOnly = false;
     document.getElementById('content').readOnly = false;
-    mode = 'Edit';
+    _mode = 'Edit';
     modalModeSet();
-  } else if(mode == 'Edit') {
+  } else if(_mode == 'Edit') {
     boardEdit();
   }
 }
@@ -242,14 +243,14 @@ function prePage(first) {
 function modalOpen(type) {
   document.getElementsByClassName("modal-backdrop")[0].style.display = "block";
   document.getElementsByClassName("modal")[0].style.display = "block";
-  mode = type;
+  _mode = type;
   modalModeSet();
 }
 
 function modalClose() {
   document.getElementsByClassName("modal-backdrop")[0].style.display = "none";
   document.getElementsByClassName("modal")[0].style.display = "none";
-  mode = '';
+  _mode = '';
   document.getElementById('title').value = '';
   document.getElementById('content').value = '';
 }
@@ -302,13 +303,14 @@ function commentListAction(commentList) {
     let li = document.createElement("li");
     li.innerHTML = `
       <i class="bi bi-person-circle" style="color:gray">`+data.name + ` ` + data.date+`</i>
-      <div style="display: flex; justify-content: space-between;">
-        <p>`+data.comment+`</p>
-        <div>
-          <i class="bi bi-pencil-square" onClick="commentEdit(${data.no})" style="cursor: pointer;"></i>
-          <i class="bi bi-x-square" onClick="commentDelete(${data.no})" style="cursor: pointer;"></i>
+        <div style="display: flex; justify-content: space-between;">
+          <p class="readComment">`+data.comment+`</p>
+          <textarea class="eidtComment" style="width:100%;">`+data.comment+`</textarea>
+          <div>
+            <i class="bi bi-pencil-square" onClick="commentEditMode(event, ${data.no})" style="cursor: pointer;"></i>
+            <i class="bi bi-x-square" onClick="commentDelete(${data.no})" style="cursor: pointer;"></i>
+          </div>
         </div>
-      </div>
       <hr>
     `;
     dataComment.appendChild(li);
@@ -372,6 +374,13 @@ function commentDelete(no) {
   } else {
     return false;
   }
+}
+
+//댓글 수정
+function commentEditMode(e, no) {
+  console.log(e)
+  //document.getElementById("commnet-area").style.display = "none";
+
 }
 
 dataSet();
