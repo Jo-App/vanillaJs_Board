@@ -83,12 +83,28 @@ function boardEdit() {
     return data.no == _boardNo;
   });
 
-  _storageData[index] = new Object({
-    no: _boardNo,
-    title: title,
-    content: content,
-    date: date,
+  let detail;
+  let comment = _storageData.filter((data) => {
+    return data.no == _boardNo;
   });
+  if(comment[0].commentList == undefined) {
+    detail = {
+      no: _boardNo,
+      title: title,
+      content: content,
+      date: date,
+    };
+  } else {
+    detail = {
+      no: _boardNo,
+      title: title,
+      content: content,
+      date: date,
+      commentList: comment[0].commentList,
+    }
+  }
+
+  _storageData[index] = {...detail};
 
   window.localStorage.setItem('storageList',JSON.stringify(_storageData));
   boardListAction();
@@ -125,8 +141,8 @@ function boardListAction() {
         td_content.innerText = _storageData[i].content.length > 20 ? _storageData[i].content.substr(0, 20) + '...' : _storageData[i].content; //20글자 뒤에는 ... 으로 처리
         td_date.innerText = _storageData[i].date;
         td_action.innerHTML = `
-          <i class="bi bi-file-text" onClick="detailItem(`+_storageData[i].no+`)"></i>
-          <i class="bi bi-trash-fill" onClick="deleteItem(`+_storageData[i].no+`)"></i>
+          <i class="bi bi-file-text" onClick="detailItem(${_storageData[i].no})"></i>
+          <i class="bi bi-trash-fill" onClick="deleteItem(${_storageData[i].no})"></i>
         `;
 
         tr.appendChild(th_no);
@@ -274,10 +290,10 @@ function deleteItem(no){
   }
 }
 
-function resize(obj) {
-  obj.style.height = "1px";
-  obj.style.height = (12+obj.scrollHeight)+"px";
-}
+// function resize(obj) {
+//   obj.style.height = "1px";
+//   obj.style.height = (12+obj.scrollHeight)+"px";
+// }
 
 //댓글 목록 불러오기
 function commentListAction(commentList) {
@@ -335,6 +351,7 @@ function commentSave() {
   document.getElementById('comment').value = '';
   commentListAction(detail[0].commentList);
   boardListAction();
+  document.getElementById('dataComment').scrollTop = document.getElementById('dataComment').scrollHeight;
 }
 
 dataSet();

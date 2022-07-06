@@ -11,25 +11,7 @@
         </div>
         <textarea id="content" class="form-control" placeholder="내용" aria-label="With textarea" rows="10"></textarea>
       </div>
-      <div id="commnet-area" class="modal-footer" style="display: flex; align-items: baseline; flex-direction: row;">
-        <ul id="dataComment" style="width: 100%; max-height:200px; list-style-type : none; padding: 0; overflow-y: auto;">
-          <!-- <li>
-            <i class="bi bi-person-circle" style="color:gray">익명</i>
-            <p>2</p>
-            <hr>
-          </li> -->
-        </ul>
-        <section style="display: flex; width: 100%;">
-          <div style="margin: 2%;">
-            <i class="bi bi-person-circle fa-lg" style="color:gray"></i>
-          </div>
-          <input id="name" type="text" class="form-control" placeholder="이름" aria-label="이름" aria-describedby="basic-addon1" style="width: 15%;">
-        </section>
-        <section style="display: flex; width: 100%;">
-          <textarea id="comment" class="form-control" placeholder="댓글" aria-label="With textarea" rows="1" onkeydown="resize(this)" onkeyup="resize(this)"></textarea>
-          <button type="button" class="btn btn-primary" onclick="commentSave()" style="min-width: 55px; margin: 0 1%;">쓰기</button>
-        </section>
-      </div>
+      <div w3-include-html="./comment.html"></div>
       <div class="modal-footer">
         <button id="modalButton" type="button" class="btn btn-primary" onclick="modalAction()"></button>
         <button type="button" class="btn btn-secondary" onclick="modalClose()">닫기</button>
