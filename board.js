@@ -2,6 +2,7 @@ let _storageData = null;
 let _page = 1; //현재 페이지 번호
 let _start = 0; //조회 시작 데이터 배열 번호
 let _limit = 10; //조회 마지막 데이터 배열 번호
+let _mode = '';
 
 //data.json 내용을 로컬스토리지에 문자형식으로 넣는다.
 async function dataSet() {
@@ -23,23 +24,22 @@ async function dataSet() {
 function modalModeSet() {
   let titleType = document.getElementById("titleType");
   let modalButton = document.getElementById("modalButton");
-  if(mode == 'Add') {
+  if(_mode == 'Add') {
     titleType.innerHTML = '글 등록';
     modalButton.innerHTML = '등록';
-  } else if(mode == 'Detail') {
+  } else if(_mode == 'Detail') {
     titleType.innerHTML = '글 상세';
     modalButton.innerHTML = '수정모드';
-  } else if(mode == 'Edit') {
+  } else if(_mode == 'Edit') {
     titleType.innerHTML = '글 수정';
     modalButton.innerHTML = '수정';
   }
 }
 
 function modalAction() {
-  console.log(mode)
-  if(mode == 'Add') {
+  if(_mode == 'Add') {
     boardSave();
-  } else if (mode =='Edit') {
+  } else if (_mode =='Edit') {
     boardEdit();
   }
 }
@@ -211,14 +211,14 @@ function prePage(first) {
 function modalOpen(type) {
   document.getElementsByClassName("modal-backdrop")[0].style.display = "block";
   document.getElementsByClassName("modal")[0].style.display = "block";
-  mode = type;
+  _mode = type;
   modalModeSet();
 }
 
 function modalClose() {
   document.getElementsByClassName("modal-backdrop")[0].style.display = "none";
   document.getElementsByClassName("modal")[0].style.display = "none";
-  mode = '';
+  _mode = '';
   document.getElementById('title').value = '';
   document.getElementById('content').value = '';
 }
