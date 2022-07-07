@@ -304,7 +304,16 @@ function commentListAction(commentList) {
     li.innerHTML = `
       <i class="bi bi-person-circle" style="color:gray">`+data.name + ` ` + data.date+`</i>
         <div style="display: flex; justify-content: space-between;">
-          <p class="readComment">`+data.comment+`</p>
+          <p class="readComment" style="display: block;">${data.comment}</p>
+          <textarea class="editComment" style="display: none;" width:90%;">${data.comment}</textarea>
+          <div class="editMode" style="display: block;">
+            <i class="bi bi-pencil-square" onClick="commentEditMode(event)" style="cursor: pointer;"></i>
+            <i class="bi bi-x-square" onClick="commentDelete(${data.no})" style="cursor: pointer;"></i>
+          </div>
+          <div class="editAction" style="display: none;">
+            <i class="bi bi-check-square" onClick="commentEdit(event, ${data.no})" style="cursor: pointer;"></i>
+            <i class="bi bi-x-square" onClick="commentEditMode(event)" style="cursor: pointer;"></i>
+          </div>
         </div>
       <hr>
     `;
@@ -316,6 +325,10 @@ function commentListAction(commentList) {
 function commentSave() {
   const name = document.getElementById('name').value;
   let comment = document.getElementById('comment').value;
+  if(comment.length == 0) { 
+    alert('댓글을 입력해주세요.');
+    return false;
+  }
   let date = new Date();
   date = dateFormat(date);
   let detail = _storageData.filter((data) => {
@@ -350,6 +363,62 @@ function commentSave() {
   commentListAction(detail[0].commentList);
   boardListAction();
   document.getElementById('dataComment').scrollTop = document.getElementById('dataComment').scrollHeight;
+}
+
+//댓글 삭제
+function commentDelete(no) {
+  if (confirm('댓글을 삭제하시겠습니까?') === true) {
+    for(let i=0; i<_storageData.length; i++) {
+      if(_storageData[i].no == _boardNo){
+        _storageData[i].commentList = _storageData[i].commentList.filter(function(data) {
+          return data.no != no;
+        });
+        window.localStorage.setItem('storageList',JSON.stringify(_storageData));
+        commentListAction(_storageData[i].commentList);
+        boardListAction();
+        break;
+      }
+    }
+  } else {
+    return false;
+  }
+}
+
+//댓글 수정 모드
+function commentEditMode(e) {
+  let readComment = e.path[2].getElementsByClassName('readComment')[0].style;
+  let editComment = e.path[2].getElementsByClassName('editComment')[0].style;
+  let editMode = e.path[2].getElementsByClassName('editMode')[0].style;
+  let editAction = e.path[2].getElementsByClassName('editAction')[0].style;
+  readComment.display == 'block' ? readComment.display = 'none' : readComment.display = 'block';
+  editComment.display == 'block' ? editComment.display = 'none' : editComment.display = 'block', editComment.width = '90%' ;
+  editMode.display == 'block' ? editMode.display = 'none' : editMode.display = 'block';
+  editAction.display == 'block' ? editAction.display = 'none' : editAction.display = 'block';
+}
+
+//댓글 수정
+function commentEdit(e, commentNo) {
+  let date = new Date();
+  let commentText = e.path[2].getElementsByClassName('editComment')[0].value;
+
+  if(commentText.length == 0) {
+    alert("글을 입력해주세요."); 
+    return false;
+  };
+  
+  date = dateFormat(date);
+  let detail = _storageData.filter((data) => {
+    return data.no == _boardNo;
+  });
+  let targetComment = detail[0].commentList.filter((data) => {
+    return data.no == commentNo;
+  })
+  targetComment[0].comment = commentText;
+
+  window.localStorage.setItem('storageList',JSON.stringify(_storageData));
+  boardListAction();
+  commentListAction(detail[0].commentList);
+  alert('수정 완료');
 }
 
 dataSet();
