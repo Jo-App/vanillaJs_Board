@@ -305,11 +305,6 @@ function commentListAction(commentList) {
       <i class="bi bi-person-circle" style="color:gray">`+data.name + ` ` + data.date+`</i>
         <div style="display: flex; justify-content: space-between;">
           <p class="readComment">`+data.comment+`</p>
-          <textarea class="eidtComment" style="width:100%;">`+data.comment+`</textarea>
-          <div>
-            <i class="bi bi-pencil-square" onClick="commentEditMode(event, ${data.no})" style="cursor: pointer;"></i>
-            <i class="bi bi-x-square" onClick="commentDelete(${data.no})" style="cursor: pointer;"></i>
-          </div>
         </div>
       <hr>
     `;
@@ -355,32 +350,6 @@ function commentSave() {
   commentListAction(detail[0].commentList);
   boardListAction();
   document.getElementById('dataComment').scrollTop = document.getElementById('dataComment').scrollHeight;
-}
-
-//댓글 삭제
-function commentDelete(no) {
-  if (confirm('댓글을 삭제하시겠습니까?') === true) {
-    for(let i=0; i<_storageData.length; i++) {
-      if(_storageData[i].no == _boardNo){
-        _storageData[i].commentList = _storageData[i].commentList.filter(function(data) {
-          return data.no != no;
-        });
-        window.localStorage.setItem('storageList',JSON.stringify(_storageData));
-        commentListAction(_storageData[i].commentList);
-        boardListAction();
-        break;
-      }
-    }
-  } else {
-    return false;
-  }
-}
-
-//댓글 수정
-function commentEditMode(e, no) {
-  console.log(e)
-  //document.getElementById("commnet-area").style.display = "none";
-
 }
 
 dataSet();
