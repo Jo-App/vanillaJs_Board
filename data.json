@@ -13,6 +13,20 @@
       "date": "2022-02-20"
     }
   ],
+  "replyList": [
+    {
+      "no":1,
+      "title":"Shrimp on the Barbie, The",
+      "content":"Bypass Coronary Artery, Four or More Arteries from Right Internal Mammary, Percutaneous Endoscopic Approach",
+      "date":"2021-10-19"
+    },
+    {"no":3,"title":"Maniac","content":"Inspection of Cervicothoracic Vertebral Joint, Open Approach","date":"2022-02-20"},
+    {"no":4,"title":"Great!","content":"Fusion of Left Elbow Joint, Open Approach","date":"2021-07-15"},
+    {"no":5,"title":"Moral Tales, Filmic Issues","content":"Introduction of Monoclonal Antibody into Peripheral Vein, Percutaneous Approach","date":"2021-07-30"},
+    {"no":6,"title":"Night and Day (Bam gua nat)","content":"Revision of Autologous Tissue Substitute in Left Carpal Joint, Open Approach","date":"2022-04-09"},
+    {"no":7,"title":"Omar Killed Me (Omar m'a tuer)","content":"Release Ventricular Septum, Open Approach","date":"2021-09-25"},
+    {"no":8,"title":"Nora's Will (Cinco días sin Nora)","content":"Restriction of Left Large Intestine, Via Natural or Artificial Opening Endoscopic","date":"2022-05-07"}
+  ],
   "date":"2021-07-12"},
   {"no":2,"title":"Shrimp on the Barbie, The","content":"Bypass Coronary Artery, Four or More Arteries from Right Internal Mammary, Percutaneous Endoscopic Approach","date":"2021-10-19"},
   {"no":3,"title":"Maniac","content":"Inspection of Cervicothoracic Vertebral Joint, Open Approach","date":"2022-02-20"},

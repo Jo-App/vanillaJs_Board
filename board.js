@@ -135,13 +135,14 @@ function boardListAction() {
         let td_date = document.createElement("td");
         let td_action = document.createElement("td");
 
-        th_no.setAttribute('scope', 'row');
+        th_no.setAttribute("scope", "row");
         th_no.innerText = _storageData[i].no;
         const title = _storageData[i].commentList ? _storageData[i].title + ' (' + _storageData[i].commentList.length + ')' : _storageData[i].title;
         td_title.innerText = title;
         td_content.innerText = _storageData[i].content.length > 20 ? _storageData[i].content.substr(0, 20) + '...' : _storageData[i].content; //20글자 뒤에는 ... 으로 처리
         td_date.innerText = _storageData[i].date;
         td_action.innerHTML = `
+          <i class="bi bi-arrow-return-right" onClick="replayModal(${_storageData[i].no})" style="cursor: pointer;"></i>
           <i class="bi bi-file-text" onClick="detailItem(${_storageData[i].no})" style="cursor: pointer;"></i>
           <i class="bi bi-trash-fill" onClick="deleteItem(${_storageData[i].no})" style="cursor: pointer;"></i>
         `;
@@ -153,6 +154,46 @@ function boardListAction() {
         tr.appendChild(td_action);
 
         dataTable.appendChild(tr);
+
+        //답글이 있는경우
+        if(_storageData[i].replyList) {
+          let td_replay = document.createElement("td");
+          td_replay.style.backgroundColor = "antiquewhite";
+          td_replay.setAttribute("colspan", "5");
+          td_replay.style.padding = "1%";
+          let table_replay = document.createElement("table");
+          table_replay.classList.add("table");
+
+          for(let j=0; j<_storageData[i].replyList.length; j++) {
+            let replay_tr = document.createElement("tr");
+            let replay_th_no = document.createElement("th");
+            let replay_td_title = document.createElement("td");
+            let replay_td_content = document.createElement("td");
+            let replay_td_date = document.createElement("td");
+            let replay_td_action = document.createElement("td");
+
+            replay_th_no.setAttribute("scope", "row");
+            replay_th_no.innerHTML = `<i class="bi bi-arrow-return-right"></i>` + _storageData[i].replyList[j].no;
+            const title = _storageData[i].replyList[j].commentList ? _storageData[i].replyList[j].title + ' (' + _storageData[i].replyList[j].commentList.length + ')' : _storageData[i].replyList[j].title;
+            replay_td_title.innerText = title;
+            replay_td_content.innerText = _storageData[i].replyList[j].content.length > 20 ? _storageData[i].replyList[j].content.substr(0, 20) + '...' : _storageData[i].replyList[j].content; //20글자 뒤에는 ... 으로 처리
+            replay_td_date.innerText = _storageData[i].replyList[j].date;
+            replay_td_action.innerHTML = `
+              <i class="bi bi-file-text" onClick="detailItem(${_storageData[i].replyList[j].no})" style="cursor: pointer;"></i>
+              <i class="bi bi-trash-fill" onClick="deleteItem(${_storageData[i].replyList[j].no})" style="cursor: pointer;"></i>
+            `;
+    
+            replay_tr.appendChild(replay_th_no);
+            replay_tr.appendChild(replay_td_title);
+            replay_tr.appendChild(replay_td_content);
+            replay_tr.appendChild(replay_td_date);
+            replay_tr.appendChild(replay_td_action);
+            table_replay.appendChild(replay_tr);
+          }
+
+          td_replay.appendChild(table_replay);
+          dataTable.appendChild(td_replay);
+        }
       }
     }
   }
