@@ -162,47 +162,59 @@ function boardListAction() {
         dataTable.appendChild(tr);
 
         //답글이 있는경우
-        if(_storageData[i].replyList) {
-          let td_replay = document.createElement("td");
-          td_replay.style.backgroundColor = "antiquewhite";
-          td_replay.setAttribute("colspan", "5");
-          td_replay.style.padding = "1%";
-          let table_replay = document.createElement("table");
-          table_replay.classList.add("table");
-
-          for(let j=0; j<_storageData[i].replyList.length; j++) {
-            let replay_tr = document.createElement("tr");
-            let replay_th_no = document.createElement("th");
-            let replay_td_title = document.createElement("td");
-            let replay_td_content = document.createElement("td");
-            let replay_td_date = document.createElement("td");
-            let replay_td_action = document.createElement("td");
-
-            replay_th_no.setAttribute("scope", "row");
-            replay_th_no.innerHTML = `<i class="bi bi-arrow-return-right"></i>` + _storageData[i].replyList[j].no;
-            const title = _storageData[i].replyList[j].commentList ? _storageData[i].replyList[j].title + ' (' + _storageData[i].replyList[j].commentList.length + ')' : _storageData[i].replyList[j].title;
-            replay_td_title.innerText = title;
-            replay_td_content.innerText = _storageData[i].replyList[j].content.length > 20 ? _storageData[i].replyList[j].content.substr(0, 20) + '...' : _storageData[i].replyList[j].content; //20글자 뒤에는 ... 으로 처리
-            replay_td_date.innerText = _storageData[i].replyList[j].date;
-            replay_td_action.innerHTML = `
-              <i class="bi bi-file-text" onClick="detailItem(${_storageData[i].replyList[j].no})" style="cursor: pointer;"></i>
-              <i class="bi bi-trash-fill" onClick="deleteItem(${_storageData[i].replyList[j].no})" style="cursor: pointer;"></i>
-            `;
-    
-            replay_tr.appendChild(replay_th_no);
-            replay_tr.appendChild(replay_td_title);
-            replay_tr.appendChild(replay_td_content);
-            replay_tr.appendChild(replay_td_date);
-            replay_tr.appendChild(replay_td_action);
-            table_replay.appendChild(replay_tr);
-          }
-
-          td_replay.appendChild(table_replay);
-          dataTable.appendChild(td_replay);
+        if(_storageData[i].replayList) {
+          replayListAction(dataTable, _storageData[i].replayList);
         }
       }
     }
   }
+}
+
+function replayListAction(dataTable, replayList) {
+  let td_replay = document.createElement("td");
+  //console.log(index)
+  //td_replay.style.backgroundColor = _colorArr[index];
+  td_replay.setAttribute("colspan", "5");
+  td_replay.style.padding = "1%";
+  let table_replay = document.createElement("table");
+  table_replay.classList.add("table");
+
+  for(let j=0; j<replayList.length; j++) {
+    let replay_tr = document.createElement("tr");
+    let replay_th_no = document.createElement("th");
+    let replay_td_title = document.createElement("td");
+    let replay_td_content = document.createElement("td");
+    let replay_td_date = document.createElement("td");
+    let replay_td_action = document.createElement("td");
+
+    replay_th_no.setAttribute("scope", "row");
+    replay_th_no.innerHTML = `<i class="bi bi-arrow-return-right"></i>` + replayList[j].no;
+    const title = replayList[j].commentList ? replayList[j].title + ' (' + replayList[j].commentList.length + ')' : replayList[j].title;
+    replay_td_title.innerText = title;
+    replay_td_content.innerText = replayList[j].content.length > 20 ? replayList[j].content.substr(0, 20) + '...' : replayList[j].content; //20글자 뒤에는 ... 으로 처리
+    replay_td_date.innerText = replayList[j].date;
+    replay_td_action.innerHTML = `
+      <i class="bi bi-arrow-return-right" onClick="replayModal(${replayList[j].no})" style="cursor: pointer;"></i>
+      <i class="bi bi-file-text" onClick="detailItem(${replayList[j].no})" style="cursor: pointer;"></i>
+      <i class="bi bi-trash-fill" onClick="deleteItem(${replayList[j].no})" style="cursor: pointer;"></i>
+    `;
+
+    replay_tr.appendChild(replay_th_no);
+    replay_tr.appendChild(replay_td_title);
+    replay_tr.appendChild(replay_td_content);
+    replay_tr.appendChild(replay_td_date);
+    replay_tr.appendChild(replay_td_action);
+    table_replay.appendChild(replay_tr);
+
+    //답글이 있는경우 (재귀)
+    if(replayList[j].replayList) {
+      replayListAction(table_replay, replayList[j].replayList);
+    }
+  }
+
+  td_replay.appendChild(table_replay);
+  dataTable.appendChild(td_replay);
+
 }
 
 function renderPagination(totalCount, currentPage) {
@@ -351,26 +363,26 @@ function boardReplaySave() {
   });
   console.log(detail)
 
-  //let lastIndex = detail[0].replyList.length == 0 ? 0 : detail[0].replyList.slice(-1)[0].no;
+  //let lastIndex = detail[0].replayList.length == 0 ? 0 : detail[0].replayList.slice(-1)[0].no;
   let title = document.getElementById('title').value;
   let content = document.getElementById('content').value;
   let date = new Date();
   date = dateFormat(date);
 
-  if(detail[0].replyList == undefined) {
-    detail[0].replyList = new Array();
-    detail[0].replyList.push({
+  if(detail[0].replayList == undefined) {
+    detail[0].replayList = new Array();
+    detail[0].replayList.push({
       no: 1, 
       title: title,
       content: content,
       date: date,
     });
   } else {
-    let lastIndex = detail[0].replyList.slice(-1)[0].no;
+    let lastIndex = detail[0].replayList.slice(-1)[0].no;
     console.log(lastIndex)
-    detail[0].replyList = 
+    detail[0].replayList = 
     [
-      ...detail[0].replyList, 
+      ...detail[0].replayList, 
       {
         no: lastIndex+1, 
         title: title,

@@ -13,12 +13,17 @@
       "date": "2022-02-20"
     }
   ],
-  "replyList": [
+  "replayList": [
     {
       "no":1,
       "title":"Shrimp on the Barbie, The",
       "content":"Bypass Coronary Artery, Four or More Arteries from Right Internal Mammary, Percutaneous Endoscopic Approach",
-      "date":"2021-10-19"
+      "date":"2021-10-19",
+      "replayList": [
+        {"no":1,"title":"Naked Gun 33 1/3: The Final Insult","content":"Revision of Autologous Tissue Substitute in Left Lower Femur, Percutaneous Approach","date":"2021-09-21"},
+        {"no":2,"title":"Good Life, The","content":"Revision of Drainage Device in Pericardial Cavity, Percutaneous Endoscopic Approach","date":"2021-11-04"},
+        {"no":3,"title":"The Big Bus","content":"Supplement Tricuspid Valve created from Right Atrioventricular Valve with Autologous Tissue Substitute, Open Approach","date":"2021-06-23"}
+      ]
     },
     {"no":3,"title":"Maniac","content":"Inspection of Cervicothoracic Vertebral Joint, Open Approach","date":"2022-02-20"},
     {"no":4,"title":"Great!","content":"Fusion of Left Elbow Joint, Open Approach","date":"2021-07-15"},
