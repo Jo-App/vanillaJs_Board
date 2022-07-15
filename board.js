@@ -39,6 +39,10 @@ function modalModeSet() {
   } else if(_mode == 'Edit') {
     titleType.innerHTML = '글 수정';
     modalButton.innerHTML = '수정';
+  } else if(_mode == 'ReplayAdd') {
+    titleType.innerHTML = '답글 등록';
+    modalButton.innerHTML = '등록';
+    document.getElementById("commnet-area").style.display = "none";
   }
 }
 
@@ -52,6 +56,8 @@ function modalAction() {
     modalModeSet();
   } else if(_mode == 'Edit') {
     boardEdit();
+  } else if(_mode == 'ReplayAdd') {
+    boardReplaySave();
   }
 }
 
@@ -330,6 +336,54 @@ function deleteItem(no){
   } else {
     return false;
   }
+}
+
+function replayModal(no) {
+  modalOpen('ReplayAdd');
+  _boardNo = no;
+}
+
+function boardReplaySave() {
+  //console.log(_boardNo)
+
+  let detail = _storageData.filter((data) => {
+    return data.no == _boardNo;
+  });
+  console.log(detail)
+
+  //let lastIndex = detail[0].replyList.length == 0 ? 0 : detail[0].replyList.slice(-1)[0].no;
+  let title = document.getElementById('title').value;
+  let content = document.getElementById('content').value;
+  let date = new Date();
+  date = dateFormat(date);
+
+  if(detail[0].replyList == undefined) {
+    detail[0].replyList = new Array();
+    detail[0].replyList.push({
+      no: 1, 
+      title: title,
+      content: content,
+      date: date,
+    });
+  } else {
+    let lastIndex = detail[0].replyList.slice(-1)[0].no;
+    console.log(lastIndex)
+    detail[0].replyList = 
+    [
+      ...detail[0].replyList, 
+      {
+        no: lastIndex+1, 
+        title: title,
+        content: content,
+        date: date,
+      }
+    ];
+  };
+
+  window.localStorage.setItem('storageList',JSON.stringify(_storageData));
+  boardListAction();
+  alert('등록 완료');
+  modalClose();
 }
 
 //댓글 목록 불러오기
